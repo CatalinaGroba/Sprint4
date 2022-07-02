@@ -47,13 +47,11 @@ def tipoDeSalida():
         buscarValoresParaArchivo()
 
     elif salida == "1":
-
-
-
         data = funcionFiltradoDni()
         if(len(data)>0):
             # print(data)
-            PrintPantalla(filtradoEstadoCheque(data))
+            if(estadoCheque!=''):
+                return PrintPantalla(filtradoEstadoCheque(data))
             
         else:print('no hubo coincidencias')
 
