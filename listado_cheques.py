@@ -7,9 +7,11 @@ salida = input("Opcion 1: Visualizar en Pantalla - Opcion 2:Descargar archivo cs
 archivo = open (str(dni)+".csv", "w")
 
 if(estadoCheque=='1'):estadoCheque='APROBADO'
-if(estadoCheque=='2'):estadoCheque='PENDIENTE'
-if(estadoCheque=='3'):estadoCheque='RECHAZADO'
-if(estadoCheque==''):estadoCheque=''
+elif(estadoCheque=='2'):estadoCheque='PENDIENTE'
+elif(estadoCheque=='3'):estadoCheque='RECHAZADO'
+else:estadoCheque=''
+
+
 
 def funcionFiltradoDni():
     arrayInfo=[]
