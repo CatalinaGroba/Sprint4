@@ -1,7 +1,9 @@
 import csv
 
 dni = input("Ingrese su DNI: ")
+TipoCheque = input("Ingrese Tipo de los cheques (1:EMITIDO 2:DEPOSITADO ): ")
 estadoCheque = input("Ingrese Estado de los cheques (1:APROBADO 2:PENDIENTE 3:RECHAZADO ): ")
+
 csv_file = csv.reader (open("test.csv", "r"))
 salida = input("Opcion 1: Visualizar en Pantalla - Opcion 2:Descargar archivo csv. Opcion: ")  
 archivo = open (str(dni)+".csv", "w")
@@ -10,6 +12,13 @@ if(estadoCheque=='1'):estadoCheque='APROBADO'
 elif(estadoCheque=='2'):estadoCheque='PENDIENTE'
 elif(estadoCheque=='3'):estadoCheque='RECHAZADO'
 else:estadoCheque=''
+
+
+if(TipoCheque=='1'):TipoCheque='EMITIDO'
+elif(TipoCheque=='2'):TipoCheque='DEPOSITADO'
+else:TipoCheque=''
+
+
 
 
 
@@ -27,8 +36,13 @@ def filtradoEstadoCheque(DatafiltradoDni):
             arrayInfo.append(row)
     return arrayInfo
 
-def filtradoTipoCheque():
-    2
+def filtradoTipoCheque(DatafiltradoDni):
+    arrayInfo=[]
+    for row in DatafiltradoDni:
+        if TipoCheque == row [9]:
+            arrayInfo.append(row)
+    return arrayInfo
+
 
 def buscarValoresParaArchivo():
     archivo
@@ -45,16 +59,19 @@ def PrintPantalla(data):
         
 
 def tipoDeSalida():  
+    if (TipoCheque == ''):
+        return print ('Tipo de cheque no valido')
     if salida == "2":
         buscarValoresParaArchivo()
 
     elif salida == "1":
         data = funcionFiltradoDni()
+        data = filtradoTipoCheque(data)
         if(len(data)>0):
             # print(data)
             if(estadoCheque!=''):
                 return PrintPantalla(filtradoEstadoCheque(data))
-            
+            PrintPantalla(data)
         else:print('no hubo coincidencias')
 
         
