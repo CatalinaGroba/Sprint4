@@ -1,32 +1,28 @@
 import csv
+from datetime import datetime
 
 dni = input("Ingrese su DNI: ")
 TipoCheque = input("Ingrese Tipo de los cheques (1:EMITIDO 2:DEPOSITADO ): ")
 estadoCheque = input(
     "Ingrese Estado de los cheques (1:APROBADO 2:PENDIENTE 3:RECHAZADO ): ")
 
-csv_file = csv.reader(open("test.csv", "r"))
-salida = input(
-    "Opcion 1: Visualizar en Pantalla - Opcion 2:Descargar archivo csv. Opcion: ")
-archivo = open(str(dni)+".csv", "w")
+csv_file = csv.reader (open("test.csv", "r"))
+salida = input("Opcion 1: Visualizar en Pantalla - Opcion 2:Descargar archivo csv. Opcion: ")
 
-if(estadoCheque == '1'):
-    estadoCheque = 'APROBADO'
-elif(estadoCheque == '2'):
-    estadoCheque = 'PENDIENTE'
-elif(estadoCheque == '3'):
-    estadoCheque = 'RECHAZADO'
-else:
-    estadoCheque = ''
+if(estadoCheque=='1'):estadoCheque='APROBADO'
+elif(estadoCheque=='2'):estadoCheque='PENDIENTE'
+elif(estadoCheque=='3'):estadoCheque='RECHAZADO'
+else:estadoCheque=''
 
 
-if(TipoCheque == '1'):
-    TipoCheque = 'EMITIDO'
-elif(TipoCheque == '2'):
-    TipoCheque = 'DEPOSITADO'
-else:
-    TipoCheque = ''
+if(TipoCheque=='1'):TipoCheque='EMITIDO'
+elif(TipoCheque=='2'):TipoCheque='DEPOSITADO'
+else:TipoCheque=''
 
+def getTimestamp():
+    dt = datetime.now()
+    ts = datetime.timestamp(dt)
+    return ts
 
 def funcionFiltradoDni():
     arrayInfo = []
@@ -51,20 +47,22 @@ def filtradoTipoCheque(DatafiltradoDni):
             arrayInfo.append(row)
     return arrayInfo
 
-
-def buscarValoresParaArchivo():
-    archivo
-    for row in csv_file:
-        if dni == row[8]:
-            archivo.write(row[9] + row[10])
-
-
 def PrintPantalla(data):
     for row in data:
         print('------------')
         print("Tipo de cheque: " +
               row[9] + "\nEstado de cheque: " + row[10] + '\nDni:' + row[8])
         print('------------')
+
+def printInCsv(data):
+    timestamp = getTimestamp()
+    f = open(str(dni) + "-" + str(timestamp) + ".csv", "a", newline="")
+    writer = csv.writer(f)
+    writer.writerow(("FechaOrigen", "FechaPago", "Valor", "NumeroCuentaDestino"))
+    for row in data:
+        writer.writerow((row[6], row[7], row[5], row[4])) 
+    f.close() 
+        
 
 
 def verificarErrorCheque(data):
@@ -82,25 +80,32 @@ def verificarErrorCheque(data):
 def tipoDeSalida():
     if (TipoCheque == ''):
         return print('Tipo de cheque no valido')
+    data = funcionFiltradoDni()
+    errorRepeticion = verificarErrorCheque(data)
+    if errorRepeticion:
+            return    
     if salida == "2":
-        buscarValoresParaArchivo()
-
+        data = filtradoTipoCheque(data)
+        if(len(data)>0):
+            if(estadoCheque!=''):
+                data = filtradoEstadoCheque(data)
+                printInCsv(data)
+                print('CSV generado exitosamente!')
+            else: 
+                printInCsv(data)
+                print('CSV generado exitosamente!')    
+        else:
+            print('No hubo coincidencias')
     elif salida == "1":
-        data = funcionFiltradoDni()
-        errorRepeticion = verificarErrorCheque(data)
-        if errorRepeticion:
-            return
         data = filtradoTipoCheque(data)
         if(len(data) > 0):
-            # print(data)
             if(estadoCheque != ''):
                 return PrintPantalla(filtradoEstadoCheque(data))
-
+            else: return PrintPantalla(data) 
         else:
-            print('no hubo coincidencias')
+            print('No hubo coincidencias')
 
     else:
-        print("no existe la opcion seleccionada")
-
+        print ("No existe la opcion seleccionada")
 
 tipoDeSalida()
