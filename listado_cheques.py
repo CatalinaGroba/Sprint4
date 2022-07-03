@@ -71,7 +71,7 @@ def tipoDeSalida():
             # print(data)
             if(estadoCheque!=''):
                 return PrintPantalla(filtradoEstadoCheque(data))
-            PrintPantalla(data)
+        
         else:print('no hubo coincidencias')
 
         
