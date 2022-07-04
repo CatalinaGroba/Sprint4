@@ -1,13 +1,14 @@
 import csv
 from datetime import datetime
 
+print(' ')
 dni = input("Ingrese su DNI: ")
 TipoCheque = input("Ingrese Tipo de los cheques (1:EMITIDO 2:DEPOSITADO ): ")
-estadoCheque = input(
-    "Ingrese Estado de los cheques (1:APROBADO 2:PENDIENTE 3:RECHAZADO ): ")
-
+print(' ')
+estadoCheque = input("Ingrese Estado de los cheques \n1:APROBADO \n2:PENDIENTE \n3:RECHAZADO \nPor defecto Enter(todos) \nOpcion: ")
+print(' ')
 csv_file = csv.reader (open("test.csv", "r"))
-salida = input("Opcion 1: Visualizar en Pantalla - Opcion 2:Descargar archivo csv. Opcion: ")
+salida = input("\n1:Visualizar en Pantalla \n2:Descargar archivo csv. \nOpcion: ")
 
 if(estadoCheque=='1'):estadoCheque='APROBADO'
 elif(estadoCheque=='2'):estadoCheque='PENDIENTE'
@@ -49,18 +50,20 @@ def filtradoTipoCheque(DatafiltradoDni):
 
 def PrintPantalla(data):
     for row in data:
-        print('------------')
-        print("Tipo de cheque: " +
-              row[9] + "\nEstado de cheque: " + row[10] + '\nDni:' + row[8])
-        print('------------')
+        print('------------------------')
+        print(f'Nro:{row[0]}')
+        print("Tipo de cheque: " + row[9] + "\nEstado de cheque: " + row[10] + '\nDni:' + row[8])
+        print(datetime.fromtimestamp(int(row[6])))
+        print('------------------------')
+
 
 def printInCsv(data):
     timestamp = getTimestamp()
     f = open(str(dni) + "-" + str(timestamp) + ".csv", "a", newline="")
     writer = csv.writer(f)
-    writer.writerow(("FechaOrigen", "FechaPago", "Valor", "NumeroCuentaDestino"))
+    writer.writerow(("NroCheque","FechaOrigen", "FechaPago", "Valor", "NumeroCuentaDestino"))
     for row in data:
-        writer.writerow((row[6], row[7], row[5], row[4])) 
+        writer.writerow((row[0],row[6], row[7], row[5], row[4])) 
     f.close() 
         
 
